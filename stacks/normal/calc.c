@@ -1,83 +1,83 @@
+/* reverse polish notation calculator -- somewhat experimental */
+
+#include <stdio.h> 
+#include <stdlib.h>
+#include <ctype.h> 
+#include <string.h> 
 
 #include "stack.h"
 
-#define MUL '*'
-#define DIV '/'
-#define ADD '+'
-#define SUB '-'
-#define EQS '='
-
-#define STACK_SIZE 100
-
-static int evaluate_RPN_expression(const char *expr);
-
-Stack *rpn_stack;
+static float evaluate(char *expr);
 
 int main(void)
 {
-    char ch, expression[STACK_SIZE], *expr_ptr;
-    bool cont = true;
+    char ch, expression[100], *p_expr;
+    bool t = true;
 
-    rpn_stack = create_stack();
+    p_expr = expression;
 
+    while (t) {
+	printf("Enter an RPN expression: ");
+	while ((ch = getchar()) != '\n') {
+            if (isalpha(ch)) {
+                t = false;
+                break;
+            }
+            *p_expr++ = ch;
+	}
+        *p_expr = '\0';
 
-    while (cont) {
-	    expr_ptr = expression;
-	    printf("Enter an RPN expression: ");
-	    while ((ch = getchar()) != '\n') {
-		    if (isalpha(ch)) {
-			    cont = false;
-			    break;
-		    } else if (!isspace(ch)) {
-			    *expr_ptr++ = ch;
-		    }
-	    }
-	    if (cont)
-		    printf("Value of expression: %d\n",	evaluate_RPN_expression(expression));
+        printf("result: %.2f\n", evaluate(expression));
+        memset(expression, 0, sizeof expression);
+        p_expr = expression;
     }
-
     return 0;
 }
 
-/* returns the value of the RPN contents pointed to by expr */
-static int evaluate_RPN_expression(const char * expr)
+static float evaluate(char *expr)
 {
-    int lhs, rhs, val;
-    int ch;
+    Stack rpn_stack = create();
+    const char *sep = " ";
+    char *ch, *tokens;
+    float lhs, rhs, val;
 
-    while (true) {
-	ch = *expr++;
-	if (isdigit(ch))
-	    push(rpn_stack, ch -= '0'); // ch is now int
-	else
-	    switch (ch) {
-		case MUL:
-		    rhs = pop(rpn_stack)->data;
-		    lhs = pop(rpn_stack)->data;
-		    push(rpn_stack, lhs * rhs);
-		    break;
-		case DIV:
-		    rhs = pop(rpn_stack)->data;
-		    lhs = pop(rpn_stack)->data;
-		    push(rpn_stack, (int) lhs / rhs);
-		    break;
-		case ADD:
-		    rhs = pop(rpn_stack)->data;
-		    lhs = pop(rpn_stack)->data;
-		    push(rpn_stack, lhs + rhs);
-		    break;
-		case SUB:
-		    rhs = pop(rpn_stack)->data;
-		    lhs = pop(rpn_stack)->data;
-		    push(rpn_stack, lhs - rhs);
-		    break;
-		case EQS:
-		    val = pop(rpn_stack)->data;
-		    if (is_empty(rpn_stack))
-		    return val;
-
-		default:
-			break;
-	    }
-    }
+    tokens = strtok(expr, sep);
+    while (tokens != NULL) {
+        ch = tokens;
+        tokens = strtok(NULL, sep);
+        if (strcmp(ch, "*") == 0) { 
+            rhs = pop(rpn_stack);
+            lhs = pop(rpn_stack);
+            printf("%.2f %s %.2f\n", lhs, ch, rhs);
+            push(rpn_stack, lhs * rhs);
+        } else if (strcmp(ch, "/") == 0) {
+            rhs = pop(rpn_stack);
+            lhs = pop(rpn_stack);
+            printf("%.2f %s %.2f\n", lhs, ch, rhs);
+            push(rpn_stack, (int) lhs / rhs);
+        } else if (strcmp(ch, "+") == 0) {
+            rhs = pop(rpn_stack);
+            lhs = pop(rpn_stack);
+            printf("%.2f %s %.2f\n", lhs, ch, rhs);
+            push(rpn_stack, lhs + rhs);
+        } else if (strcmp(ch, "-") == 0) {
+            rhs = pop(rpn_stack);
+            lhs = pop(rpn_stack);
+            printf("%.2f %s %.2f\n", lhs, ch, rhs);
+            push(rpn_stack, lhs - rhs);
+        } else if (strcmp(ch, "^") == 0) {
+            rhs = pop(rpn_stack);
+            printf("%.2f ^2 \n", rhs);
+            push(rpn_stack, rhs * rhs);
+        } else if (strcmp(ch, "=") == 0) {
+            val = pop(rpn_stack);
+            if (is_empty(rpn_stack))
+                return val;
+        } else {
+            push(rpn_stack, atoi(ch));
+        }
+    }    
+    val = pop(rpn_stack);
+    destroy(rpn_stack);
+    return val;
 }

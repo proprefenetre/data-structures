@@ -1,32 +1,19 @@
-#ifndef MY_STACK_H
+#ifndef STACK_ADT_H
+#define STACK_ADT_H
 
-#define MY_STACK_H
-
-#include <stdio.h>
-#include <stdlib.h>
-/* #include <string.h> */
 #include <stdbool.h>
-/* #include <ctype.h> */
-
-/* #define MAX_LEN 30 */
-
-struct Node {
-    int idx;
-    int data;
-    struct Node *next;
-};
 
 typedef struct stack_type *Stack;
 
-Stack create_stack(void);
-/* void push(Stack *list, char *str); */
-void push(Stack list, int value);
+Stack create(void);
+void destroy(Stack s);
 
-struct Node *pop(Stack list);
-struct Node *peek(Stack list);
+float length(Stack s);
+void make_empty(Stack s);
+bool is_empty(Stack s);
 
-bool is_empty(Stack list);
-/* char *read_name(void); */
+void push(Stack s, float i);
+float pop(Stack s);
+float peek(Stack s);
 
-
-#endif /* ifndef MY_STACK_H */
+#endif /* ifndef STACK_ADT_H */
