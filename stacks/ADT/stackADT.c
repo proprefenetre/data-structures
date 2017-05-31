@@ -19,7 +19,7 @@ Stack create(void)
 {
     Stack s = malloc(sizeof(struct stack_type));
     if (s == NULL) {
-	terminate("Error -- create: stack could not be created.\n");
+	terminate("Error -- create: could not create stack.\n");
     }
     s->top = NULL;
     return s;
@@ -43,16 +43,11 @@ bool is_empty(Stack s)
     return s->top == NULL;
 }
 
-bool is_full(Stack s)
-{
-    return false;
-}
-
 void push(Stack s, Item i)
 {
     struct Node *new_node = malloc(sizeof(struct Node));
     if (new_node == NULL) {
-        terminate("Error -- push: stack is full.\n");
+        terminate("Error -- push: out of memory.\n");
     }
     
     new_node->data = i;
@@ -75,4 +70,3 @@ Item pop(Stack s)
     free(old_top);
     return i;
 }
-
