@@ -44,14 +44,6 @@ static void exists(Queue *q)
         my_error("Error in %s: Queue does not exist. \n");
     }
 }
-/* static char * typename(Ntype t) */
-/* { */
-/*     if (t == INT) { */
-/*         return "INT"; */
-/*     } else if (t == STR) { */
-/*         return "STR"; */
-/*     } */
-/* } */
 
 Queue *create_queue(Ntype t) 
 {

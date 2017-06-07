@@ -16,9 +16,12 @@ typedef struct list {
 } List;
 
 List *init_list(void);
+
 void prepend(List *l, const int val);
 void append(List *l, const int val);
+
 void print_list(const List *l);
+
 bool is_empty(const List *l);
 
 #endif /* ifndef LINKEDLIST_H */

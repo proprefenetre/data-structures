@@ -1,27 +1,21 @@
-CC = gcc
-CFLAGS = -std=c99 -Wall -Wextra -Wpedantic -g
+CC=gcc
+CFLAGS=-Wall -Wextra -O2 -Wpedantic -g
+LFLAGS=
 
-SRC = calc.c stack.c
-HEADER = stack.h
-OBJ = ${SRC:.c=.o}
-EXE = calc
+CFILES= stack.c stack_test.c
+OBJ=$(CFILES:.c=.o)
+HEADERS= stack.h
+EXE= stack-test
 
-all: ${EXE}
+${EXE}: $(OBJ)
+	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@ 
 
-# The first line clears out the suffix list, the second introduces all 
-# suffixes which may be subject to implicit rules in this Makefile.
 .SUFFIXES:
 .SUFFIXES: .c .o
-
-${OBJ}: ${HEADER}
-
-${EXE}: ${OBJ}
-	${CC} -o $@ ${OBJ} ${CFLAGS}
+%.o: %.c $(HEADERS)
+	gcc $(CFLAGS) -c -o $@ $< 
 
 .PHONY: clean
 
-clean: 
-	@echo cleaning up:
-	@rm -rf ${EXE} ${OBJ}
-
-
+clean:
+	rm -vf *.o $(EXE)

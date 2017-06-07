@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h> 
 
 #include "stack.h"
 
@@ -18,26 +19,39 @@ static void terminate(const char * message)
     exit(EXIT_FAILURE);
 }
 
-Stack create(void)
+static bool is_empty(const Stack s) 
+{
+    return s->top == NULL;
+}
+
+static void make_empty(Stack s)
+{
+    while (!is_empty(s)) {
+        pop(s);
+    }
+}
+
+Stack create_stack(void)
 {
     Stack s = malloc(sizeof(struct stack_type));
     if (s == NULL) {
-	terminate("Error -- create: could not create stack.\n");
+	terminate("Error -- create: not enough memory.\n");
     }
+
     s->top = NULL;
     return s;
 }
 
-void destroy(Stack s)
+void destroy_stack(Stack s)
 {
     make_empty(s);
     free(s);
 }
 
-float length(Stack s)
+int length(Stack s)
 {
     struct Node *current = s->top;
-    float size = 0;
+    int size = 0;
 
     while (current) {
         current = current->next;
@@ -45,18 +59,6 @@ float length(Stack s)
     }
     
     return size;
-}
-
-void make_empty(Stack s)
-{
-    while (!is_empty(s)) {
-        pop(s);
-    }
-}
-
-bool is_empty(Stack s)
-{
-    return s->top == NULL;
 }
 
 void push(Stack s, float i)
