@@ -1,5 +1,8 @@
-#include "doublelinkedlist.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "doublelinkedlist.h"
 
 static void mem_check(void *p)
 {

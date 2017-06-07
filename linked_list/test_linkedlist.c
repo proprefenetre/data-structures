@@ -8,9 +8,11 @@ int main(void)
     for (int i = 0; i < 10; i++) {
         prepend(l, i);
         append(l, i);
+        print_list(l);
+        printf("\n");
     }
 
-    print_list(l);
+    printf("%d\n", l->size);
     
     return 0;
 }

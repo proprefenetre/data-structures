@@ -5,10 +5,9 @@
 int main(void)
 {
     Queue *q = create_queue(STR), *int_q = create_queue(INT);
-    char *msg = "";
-    int j, k, i[5] = {0}, *intptr[5];
 
-    msg = "hallo wereld!";
+    char *msg = "hallo wereld!";
+    int j, k, i[5] = {0}, *intptr[5];
 
     push(q, msg, STR);
 

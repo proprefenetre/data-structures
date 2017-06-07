@@ -1,10 +1,7 @@
 #ifndef DOUBLELINKDLST_H
 #define DOUBLELINKDLST_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
 
 #define MAX_STR_SIZE 20
 struct Node {

@@ -1,24 +1,29 @@
+#include <stdio.h> 
 #include "stack.h"
 
 int main(void)
 {
-    Stack st = create_stack();
+    Stack st = create();
     int i;
     
-    for (i = 50; i-- > 0; ) {
+    for (i = 10; i-- > 0; ) {
 	push(st, i);
     }
 
-    printf("%d\n", peek(st)->data);
-    pop(st);
-    printf("%d\n", peek(st)->data);
-    pop(st);
-    pop(st);
-    printf("%d\n", peek(st)->data);
-    pop(st);
-    pop(st);
-    pop(st);
-    printf("%d\n", peek(st)->data);
+    printf("Size: %d\n", length(st));
+    printf("Top: %d\n", peek(st));
+    printf("Popped: %d\n", pop(st));
+    printf("Top: %d\n", peek(st));
+    printf("Popped: %d\n", pop(st));
+    printf("Popped: %d\n", pop(st));
+    printf("Top: %d\n", peek(st));
+    printf("Popped: %d\n", pop(st));
+    printf("Popped: %d\n", pop(st));
+    printf("Top: %d\n", peek(st));
+    
+    printf("Size: %d\n", length(st));
+
+    destroy(st);
 
     return 0;
 }
