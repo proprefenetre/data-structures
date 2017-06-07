@@ -1,11 +1,12 @@
+#include <stdio.h> 
+#include <stdlib.h> 
 #include "stack.h"
 
 static void stack_underflow(void);
 
-
 struct stack_type {
     int size;
-    struct Node *head, *tail;
+    struct StackNode *head, *tail;
 };
 
 Stack create_stack(void)
@@ -23,56 +24,61 @@ Stack create_stack(void)
     return new_stack;
 }
 
-/* void push(Stack list, char *str) */
-void push(Stack list, int value)
+void destroy_stack(Stack s)
 {
-    struct Node *head = list->head;
-    struct Node *new_node = malloc(sizeof(struct Node));
+    while (!is_empty(s)) {
+        free(pop(s));
+    }
 
-    new_node->next = NULL;
-    new_node->idx = list->size;
+    free(s);
+}
+
+void push(Stack s, double value)
+{
+    struct StackNode *head = s->head;
+    struct StackNode *new_node = malloc(sizeof(struct StackNode));
 
     if (new_node == NULL) {
 	printf("Error: not enough memory\n");
 	exit(EXIT_FAILURE);
     }
 
-    /* strcpy(new_node->data, str); */
+    new_node->next = NULL;
     new_node->data = value;
 
     if (head == NULL) {
-	list->head = new_node;
-	list->size++;
+	s->head = new_node;
+	s->size++;
 	return;
     }
 
     new_node->next = head;
-    list->head = new_node;
-    list->size++;
+    s->head = new_node;
+    s->size++;
 }
 
-struct Node *pop(Stack list)
+struct StackNode *pop(Stack s)
 {
-    if (is_empty(list)) {
+    if (is_empty(s)) {
 	stack_underflow();
     }
-    struct Node *popped = list->head;
-    list->head = popped->next;
-    list->size--;
+    struct StackNode *popped = s->head;
+    s->head = popped->next;
+    s->size--;
     return popped;
 }
 
-struct Node *peek(Stack list)
+struct StackNode *peek(Stack s)
 {
-    if (is_empty(list)) {
+    if (is_empty(s)) {
 	stack_underflow();
     }
-    return list->head;
+    return s->head;
 }
 
-bool is_empty(Stack list)
+bool is_empty(Stack s)
 {
-    return 0 == list->size;
+    return 0 == s->size;
 }
 
 static void stack_underflow(void)
@@ -80,18 +86,4 @@ static void stack_underflow(void)
     printf("Error: empty Stack\n");
     exit(EXIT_FAILURE);
 }
-
-/*
-char *read_name(void)
-{
-    char *name = malloc(sizeof(char *)), *name_ptr = name, ch;
-
-    while ((ch = getchar()) != '\n') {
-	*name_ptr++ = ch;
-    }
-    *name_ptr = '\0';
-
-    return name;
-}
-*/
 

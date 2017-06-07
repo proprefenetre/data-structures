@@ -1,3 +1,6 @@
+#include <stdio.h> 
+#include <ctype.h> 
+#include <math.h> 
 
 #include "stack.h"
 
