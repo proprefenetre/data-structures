@@ -1,12 +1,13 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -O2 -Wpedantic -g
 LFLAGS= -lm
-CFILES= stack_test.c stack.c
+
+CFILES= calc.c stack.c
 OBJ=$(CFILES:.c=.o)
 HEADERS= stack.h
-EXE= stack-test
+EXE= calc-test
 
-${EXE}: $(OBJ)
+$(EXE): $(OBJ)
 	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@ 
 
 .SUFFIXES:

@@ -54,6 +54,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Files
+*-test
+*test.c
+
 ### Vim ###
 # swap
 [._]*.s[a-v][a-z]
