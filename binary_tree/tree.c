@@ -69,9 +69,9 @@ void treeprint(struct tnode *p)
 //  {{{1 // 
 {
     if (p != NULL) {
-        //treeprint(p->left);
+        treeprint(p->left);
         printf("%4d %s\n", p->freq, p->word);
-        //treeprint(p->right);
+        treeprint(p->right);
     }
 }
 //  1}}} // 

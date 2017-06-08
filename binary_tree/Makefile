@@ -1,25 +1,20 @@
-# $@ (full target name of the current target)
-# $? (returns the dependencies that are newer than the current target)
-# $* (returns the text that corresponds to % in the target)
-# $< (name of the first dependency)
-# $^ (name of all the dependencies with space as the delimiter)
-
-CFILES=
+CFILES= tree.c
+OBJ=$(CFILES:.c=.o)
+HEADERS=
 CC=gcc
 CFLAGS=-Wall -Wextra -O2 -Wpedantic -g
-EXE=
+LFLAGS=
+EXE= a.out
 
-O=$(CFILES:.c=.o)
+$(EXE): $(OBJ)
+	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@ 
 
-${EXE}: clean ${O}
-	${CC} ${CFLAGS} -o $@ ${O} 
-
+.SUFFIXES:
 .SUFFIXES: .c .o
+%.o: %.c $(HEADERS)
+	gcc $(CFLAGS) -c -o $@ $< 
 
-%.o: %.c
-	gcc ${CFLAGS} -c -o $@ $< 
+.PHONY: clean
 
 clean:
-	rm -vf *.o ${EXE}
-
-
+	rm -vf *.o $(EXE)
