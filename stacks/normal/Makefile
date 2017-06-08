@@ -7,7 +7,7 @@ OBJ=$(CFILES:.c=.o)
 HEADERS= stack.h
 EXE= stack-test
 
-${EXE}: $(OBJ)
+$(EXE): $(OBJ)
 	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@ 
 
 .SUFFIXES:
