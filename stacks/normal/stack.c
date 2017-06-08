@@ -1,99 +1,118 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h> 
+#include <stdlib.h> 
 #include <stdbool.h> 
 
 #include "stack.h"
 
-struct Node {
-    float data;
-    struct Node *next;
-};
-
+/*
 struct stack_type {
-    struct Node *top;
+    struct StackNode *top;
 };
+*/
 
-static void terminate(const char * message)
+static bool is_empty(const Stack s)
 {
-    printf("%s\n", message);
-    exit(EXIT_FAILURE);
+    return length(s) == 0;
 }
 
-static bool is_empty(const Stack s) 
+static void stack_underflow(void)
 {
-    return s->top == NULL;
+    printf("Error: empty Stack\n");
 }
 
-static void make_empty(Stack s)
+static void null_check(const void *p)
+{
+    if (p == NULL) {
+        printf("Error -- not enough memory.\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+int length(const Stack s)
+{
+    struct StackNode *current = s->top;
+    int l = 0;
+    
+    while (current != NULL) {
+        current = current->next;
+        l++;
+    }
+
+    return l;
+}
+
+Stack create_stack(void)
+{
+    Stack new_stack = malloc(sizeof(Stack));
+    null_check(new_stack);
+
+    new_stack->top = NULL;
+
+    return new_stack;
+}
+
+void destroy_stack(Stack s)
+{
+    clear(s);
+    free(s);
+}
+
+void clear(Stack s) 
 {
     while (!is_empty(s)) {
         pop(s);
     }
 }
 
-Stack create_stack(void)
+void push(Stack s, double value)
 {
-    Stack s = malloc(sizeof(struct stack_type));
-    if (s == NULL) {
-	terminate("Error -- create: not enough memory.\n");
-    }
+    struct StackNode *head = s->top;
+    struct StackNode *new_node = malloc(sizeof(struct StackNode));
 
-    s->top = NULL;
-    return s;
-}
+    null_check(new_node);
 
-void destroy_stack(Stack s)
-{
-    make_empty(s);
-    free(s);
-}
+    new_node->next = NULL;
+    new_node->data = value;
 
-int length(Stack s)
-{
-    struct Node *current = s->top;
-    int size = 0;
-
-    while (current) {
-        current = current->next;
-        size++;
-    }
-    
-    return size;
-}
-
-void push(Stack s, float i)
-{
-    struct Node *new_node = malloc(sizeof(struct Node));
-    if (new_node == NULL) {
-        terminate("Error -- push: out of memory.\n");
-    }
-    
-    new_node->data = i;
-    new_node->next = s->top;
+    new_node->next = head;
     s->top = new_node;
 }
 
-float pop(Stack s)
+double pop(Stack s)
 {
-    struct Node *old_top;
-    float i;
+    double val;
 
     if (is_empty(s)) {
-	terminate("Error -- not enough operands.\n");
+	stack_underflow();
+        return 0.0;
     }
-
-    old_top = s->top;
-    i = old_top->data;
-    s->top = old_top->next;
-    free(old_top);
-    return i;
+    struct StackNode *popped = s->top;
+    val = popped->data;
+    s->top = popped->next;
+    free(popped);
+    return val;
 }
 
-float peek(Stack s)
+double peek(Stack s)
 {
     if (is_empty(s)) {
-	terminate("Error -- pop: stack is empty.\n");
+	stack_underflow();
+    } else {
+        return s->top->data;
+    }
+}
+
+void swap_first(Stack s)
+{
+    if (length(s) < 2) {
+        printf("Error -- swap_first: not enough elements.\n");
+        return;
     }
 
-    return s->top->data;
+    struct StackNode *a = s->top, *b = s->top->next;
+    double tmp;
+
+    tmp = a->data;
+    a->data = b->data;
+    b->data = tmp;
 }
